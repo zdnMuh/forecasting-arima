@@ -1,0 +1,59 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} {{ request.endpoint.split('.')[-1].capitalize() }} {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Welcome Forecasting Saham GOTO</h1>
+            <ol class="breadcrumb card bg-light">
+                <li class="breadcrumb-item active m-1">Dashboard</li>
+            </ol>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card bg-primary text-white mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Data Train</h5>
+                            <h2 class="text-end">{{ hitung1 }}</h2>
+                        </div>
+                        <div class="card-footer d-flex align-items-center justify-content-between">
+                            <a class="small text-white stretched-link" href="/train/">View Details</a>
+                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card bg-success text-white mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Data Test</h5>
+                            <h2 class="text-end">{{ hitung2 }}</h2>
+                        </div>
+                        <div class="card-footer d-flex align-items-center justify-content-between">
+                            <a class="small text-white stretched-link" href="/test/">View Details</a>
+                            <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="/static/assets/demo/chart-area-demo.js"></script>
+    <script src="{{ url_for('static', filename='demo/chart-area-demo.js') }}"></script>
+    <script src="/static/assets/demo/chart-bar-demo.js"></script>
+    <script src="{{ url_for('static', filename='demo/chart-bar-demo.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    <script src="/static/assets/js/datatables-simple-demo.js"></script>
+    <script src="{{ url_for('static', filename='js/datatables-simple-demo.js') }}"></script>
+
+{% endblock javascripts %}

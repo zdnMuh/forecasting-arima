@@ -1,0 +1,64 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} {{ request.endpoint.split('.')[-1].capitalize() }} {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Data Train</h1>
+            <ol class="breadcrumb mb-4 card bg-light">
+                <li class="breadcrumb-item active m-1">Data Train</li>
+            </ol>
+            <div class="row">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+                    <button class="btn btn-success me-md-2" type="button">Process</button>
+                </div>
+            <div class="col-12">
+                <div class="card-mb4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        DataTable Example
+                    </div>
+                    <div class="card-body">
+                        <table class="table" id="datatablesSimple">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Close</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in value %}
+                                <tr>
+                                    <td>{{ item.Date }}</td>
+                                    <td>{{ item.Close }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+    <script src="/static/assets/demo/chart-area-demo.js"></script>
+    <script src="{{ url_for('static', filename='demo/chart-area-demo.js') }}"></script>
+    <script src="/static/assets/demo/chart-bar-demo.js"></script>
+    <script src="{{ url_for('static', filename='demo/chart-bar-demo.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    <script src="/static/assets/js/datatables-simple-demo.js"></script>
+    <script src="{{ url_for('static', filename='js/datatables-simple-demo.js') }}"></script>
+
+{% endblock javascripts %}
