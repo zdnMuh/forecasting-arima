@@ -18,3 +18,8 @@ class dataTest(db.Model):
     __tablename__ = 'datatest'
     Date = db.Column(db.Date, primary_key=True)
     Close = db.Column(db.Integer)
+
+class dataResult(db.Model):
+    __tablename__ = 'result'
+    Date = db.Column(db.Date, primary_key=True)
+    Close = db.Column(db.Integer)

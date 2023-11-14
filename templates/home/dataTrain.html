@@ -20,6 +20,9 @@
                     <!-- Misalnya, input file untuk mengunggah data, atau input teks untuk parameter lain -->
                         <button class="btn btn-success me-md-2" type="submit">Pre-Processing</button>
                     </form>
+                    <form method="post" action="{{ url_for('delete_all_train') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua data?');">
+                        <button type="submit" class="btn btn-danger me-md-2">Delete All</button>
+                    </form>
 {#                    <button class="btn btn-success me-md-2" type="button">Pre-Processing</button>#}
                     <button class="btn btn-warning" type="button">Import</button>
                 </div>

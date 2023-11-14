@@ -1,11 +1,11 @@
 from flask import Flask, render_template, redirect, url_for, request
-from dbConf import db, dataTrain, dataTest
+from dbConf import db, dataTrain, dataTest, dataResult
 from datetime import datetime
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 
 app = Flask(__name__)
-# db data train
+# db
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Cupborneo@localhost/db_goto'
 db.init_app(app)
 app.config['SECRET_KEY'] = 'kunci_rahasia'
@@ -40,15 +40,29 @@ def train():  # put application's code here
     data = dataTrain.query.all()
     return render_template("/home/dataTrain.html", value=data)
 
+@app.route('/delete_all_train', methods=['POST'])
+def delete_all_train():
+    if request.method == 'POST':
+        dataTrain.query.delete()
+        db.session.commit()
+        return redirect(url_for('train'))
+
 @app.route('/test/')
 def test():  # put application's code here
     data = dataTest.query.all()
     return render_template("/home/dataTest.html", value=data)
 
+@app.route('/delete_all_test', methods=['POST'])
+def delete_all_test():
+    if request.method == 'POST':
+        dataTest.query.delete()
+        db.session.commit()
+        return redirect(url_for('test'))
+
 @app.route('/result/')
 def result():  # put application's code here
-    data = dataTrain.query.all()
-    return render_template("/home/resultForecast.html")
+    data = dataResult.query.all()
+    return render_template("/home/resultForecast.html", value=data)
 
 @app.route('/login')
 def login():  # put application's code here

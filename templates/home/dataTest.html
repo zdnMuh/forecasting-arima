@@ -15,8 +15,13 @@
             </ol>
             <div class="row">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+                    <form method="post" action="{{ url_for('delete_all_test') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua data?');">
+                        <button type="submit" class="btn btn-danger me-md-2">Delete All</button>
+                    </form>
                     <button class="btn btn-success me-md-2" type="button">Process</button>
                 </div>
+            </div>
+            <div class="row">
             <div class="col-12">
                 <div class="card-mb4">
                     <div class="card-header">

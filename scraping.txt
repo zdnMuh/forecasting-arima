@@ -1,0 +1,57 @@
+pip install flask flask_sqlalchemy requests beautifulsoup4
+
+rom flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
+import requests
+from bs4 import BeautifulSoup
+from datetime import datetime
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://username:password@localhost/db_name'
+db = SQLAlchemy(app)
+
+class Train(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    Date = db.Column(db.String(10))
+    Open = db.Column(db.Float)
+    High = db.Column(db.Float)
+    Low = db.Column(db.Float)
+    Close = db.Column(db.Float)
+    Adj = db.Column(db.Float)
+    Volume = db.Column(db.Integer)
+
+@app.route('/scrape_yahoo_finance')
+def scrape_yahoo_finance():
+    url = 'https://finance.yahoo.com/quote/AAPL/history?p=AAPL'  # Ganti URL sesuai dengan saham yang diinginkan
+
+    # Mengambil halaman web
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Mendapatkan tabel histori harga saham
+    table = soup.find('table', {'data-test': 'historical-prices'})
+
+    # Mengambil data dari setiap baris dalam tabel
+    rows = table.find_all('tr')[1:]  # Mengabaikan header
+    for row in rows:
+        columns = row.find_all('td')
+        date_str = columns[0].text
+        date = datetime.strptime(date_str, '%b %d, %Y').strftime('%Y-%m-%d')
+
+        train_data = Train(
+            Date=date,
+            Open=float(columns[1].text.replace(',', '')),
+            High=float(columns[2].text.replace(',', '')),
+            Low=float(columns[3].text.replace(',', '')),
+            Close=float(columns[4].text.replace(',', '')),
+            Adj=float(columns[5].text.replace(',', '')),
+            Volume=int(columns[6].text.replace(',', ''))
+        )
+        db.session.add(train_data)
+
+    db.session.commit()
+
+    return "Web scraping berhasil dan data telah dimasukkan ke dalam tabel 'train'."
+
+if __name__ == '__main__':
+    app.run(debug=True)
