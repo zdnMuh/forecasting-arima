@@ -9,13 +9,13 @@
 
     <main>
         <div class="container-fluid px-4">
-            <h1 class="mt-4">Data Train</h1>
+            <h1 class="mt-4">Data Test</h1>
             <ol class="breadcrumb mb-4 card bg-light">
-                <li class="breadcrumb-item active m-1">Data Train</li>
+                <li class="breadcrumb-item active m-1">Data Test</li>
             </ol>
             <div class="row">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
-                    <form method="post" action="{{ url_for('delete_all_test') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua data?');">
+                    <form method="post" action="{{ url_for('deleteAllTest') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua data?');">
                         <button type="submit" class="btn btn-danger me-md-2">Delete All</button>
                     </form>
                     <button class="btn btn-success me-md-2" type="button">Process</button>
@@ -40,7 +40,7 @@
                             {% for item in value %}
                                 <tr>
                                     <td>{{ item.Date }}</td>
-                                    <td>{{ item.Close }}</td>
+                                    <td>{{ "{:,.0f}".format(item.Close) }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>

@@ -55,3 +55,124 @@ def scrape_yahoo_finance():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+# @app.route('/scrape/')
+# def scrape():
+#     url = 'https://finance.yahoo.com/quote/GOTO.JK/history?p=GOTO.JK'  # Ganti URL sesuai dengan saham yang diinginkan
+#
+#     # Mengambil halaman web
+#     response = requests.get(url)
+#     soup = BeautifulSoup(response.text, 'html.parser')
+#
+#     # Mendapatkan tabel histori harga saham
+#     table = soup.find('table', {'data-test': 'historical-prices'})
+#
+#     if table:
+#         # Mengambil data dari setiap baris dalam tabel
+#         rows = table.find_all('tr')[1:]  # Mengabaikan header
+#         for row in rows:
+#             columns = [col.text.strip() for col in row.find_all(['th', 'td'])]
+#             # date_str = columns[0].text
+#             # date = datetime.strptime(date_str, '%b %d, %Y').strftime('%Y-%m-%d')
+#
+#             trainData = dataTrain(
+#                 Date=date,
+#                 Open=float(columns[1].text.replace(',', '')),
+#                 High=float(columns[2].text.replace(',', '')),
+#                 Low=float(columns[3].text.replace(',', '')),
+#                 Close=float(columns[4].text.replace(',', '')),
+#                 Adj=float(columns[5].text.replace(',', '')),
+#                 Volume=float(columns[6].text.replace(',', ''))
+#             )
+#             db.session.add(trainData)
+#
+#     db.session.commit()
+#
+#     return redirect(url_for('train'))
+
+@app.route('/scrape/')
+def scrape():
+    """
+    Function to scrape historical data from Yahoo Finance for a given stock symbol.
+
+    Parameters:
+    - symbol: str
+        The stock symbol for which historical data is to be scraped.
+
+    Returns:
+    - list of dictionaries:
+        A list of dictionaries containing the scraped historical data.
+        Each dictionary represents a single day's data and contains the following keys:
+        - 'Date': The date of the data
+        - 'Open': The opening price of the stock on that day
+        - 'High': The highest price of the stock on that day
+        - 'Low': The lowest price of the stock on that day
+        - 'Close': The closing price of the stock on that day
+        - 'Volume': The trading volume of the stock on that day
+
+    Raises:
+    - ValueError:
+        Raises an error if the symbol is not provided or is empty.
+    - requests.exceptions.RequestException:
+        Raises an error if there is an issue with making the HTTP request.
+    """
+
+    # Checking if the symbol is provided and not empty
+    # if not symbol:
+    #     raise ValueError("Symbol is required.")
+
+    # Creating the URL for the Yahoo Finance page of the stock symbol
+    url = f"https://finance.yahoo.com/quote/GOTO.JK/history?p=GOTO.JK"
+
+    try:
+        # Sending an HTTP GET request to the URL
+        response = requests.get(url)
+
+        # Parsing the HTML content of the response using BeautifulSoup
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        # Finding the table element that contains the historical data
+        table = soup.find('table', {'data-test': 'historical-prices'})
+
+        # Extracting the table rows from the table
+        rows = table.find_all('tr')
+
+        # Initializing an empty list to store the scraped data
+        data = []
+
+        # Looping through each row (excluding the header row)
+        for row in rows[1:]:
+            # Extracting the data cells from the row
+            cells = row.find_all('td')
+
+            # Extracting the data from the cells and creating a dictionary
+            day_data = {
+                'Date': cells[0].text,
+                'Open': float(cells[1].text.replace(',', '')),
+                'High': float(cells[2].text.replace(',', '')),
+                'Low': float(cells[3].text.replace(',', '')),
+                'Close': float(cells[4].text.replace(',', '')),
+                'Adj': float(cells[5].text.replace(',', '')),
+                'Volume': int(cells[6].text.replace(',', ''))
+            }
+
+            # Adding the dictionary to the list of data
+            data.append(day_data)
+
+        return data
+
+    except requests.exceptions.RequestException as e:
+        raise requests.exceptions.RequestException(f"Error occurred while making the request: {e}")
+
+# Example usage of the scrape_historical_data function:
+
+# # Scrape historical data for Apple Inc. (symbol: AAPL)
+# symbol = 'AAPL'
+# historical_data = scrape_historical_data(symbol)
+# print(f"Historical data for {symbol}:")
+# for data in historical_data:
+#     print(data)
+
+import requests
+from bs4 import BeautifulSoup

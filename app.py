@@ -1,12 +1,14 @@
 from flask import Flask, render_template, redirect, url_for, request
 from dbConf import db, dataTrain, dataTest, dataResult
 from datetime import datetime
+from forms import uploadForm
+import pandas as pd
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 
 app = Flask(__name__)
 # db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Cupborneo@localhost/db_goto'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/db_goto'
 db.init_app(app)
 app.config['SECRET_KEY'] = 'kunci_rahasia'
 
@@ -24,24 +26,50 @@ def dashboard():  # put application's code here
 def train():  # put application's code here
     if request.method == 'POST':
         # Mendapatkan data dari tabel Train
-        data_train_records = dataTrain.query.all()
+        dataTrainRecords = dataTrain.query.all()
 
         # Mengambil hanya field Date dan Close
-        data_test_records = [(record.Date, record.Close) for record in data_train_records]
+        dataTestRecords = [(record.Date, record.Close) for record in dataTrainRecords]
 
         # Memasukkan data ke tabel Test
-        for date, close in data_test_records:
+        for date, close in dataTestRecords:
             formatted_date = datetime.strptime(date, '%m/%d/%Y').strftime('%Y-%m-%d')
-            new_data_test = dataTest(Date=formatted_date, Close=close)
-            db.session.add(new_data_test)
+            newDataTest = dataTest(Date=formatted_date, Close=close)
+            db.session.add(newDataTest)
 
         db.session.commit()
         return redirect(url_for("test"))
     data = dataTrain.query.all()
     return render_template("/home/dataTrain.html", value=data)
 
-@app.route('/delete_all_train', methods=['POST'])
-def delete_all_train():
+
+@app.route('/upload/', methods=['GET', 'POST'])
+def upload():
+    form = uploadForm()
+
+    if form.validate_on_submit():
+        csv_file = form.csv_file.data
+        df = pd.read_csv(csv_file)
+
+        for index, row in df.iterrows():
+            train_data = dataTrain(
+                Date=row['Date'],
+                Open=row['Open'],
+                High=row['High'],
+                Low=row['Low'],
+                Close=row['Close'],
+                Adj=row['Adj Close'],
+                Volume=row['Volume']
+            )
+            db.session.add(train_data)
+
+        db.session.commit()
+        return redirect(url_for('train'))
+
+    return render_template('/home/upload.html', title='Upload', form=form)
+
+@app.route('/deleteAllTrain/', methods=['POST'])
+def deleteAllTrain():
     if request.method == 'POST':
         dataTrain.query.delete()
         db.session.commit()
@@ -52,8 +80,8 @@ def test():  # put application's code here
     data = dataTest.query.all()
     return render_template("/home/dataTest.html", value=data)
 
-@app.route('/delete_all_test', methods=['POST'])
-def delete_all_test():
+@app.route('/deleteAllTest', methods=['POST'])
+def deleteAllTest():
     if request.method == 'POST':
         dataTest.query.delete()
         db.session.commit()

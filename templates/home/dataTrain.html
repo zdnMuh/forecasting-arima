@@ -20,11 +20,10 @@
                     <!-- Misalnya, input file untuk mengunggah data, atau input teks untuk parameter lain -->
                         <button class="btn btn-success me-md-2" type="submit">Pre-Processing</button>
                     </form>
-                    <form method="post" action="{{ url_for('delete_all_train') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua data?');">
+                    <form method="post" action="{{ url_for('deleteAllTrain') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua data?');">
                         <button type="submit" class="btn btn-danger me-md-2">Delete All</button>
                     </form>
-{#                    <button class="btn btn-success me-md-2" type="button">Pre-Processing</button>#}
-                    <button class="btn btn-warning" type="button">Import</button>
+                    <a href="{{ url_for('upload') }}" class="btn btn-primary">Import Data</a>
                 </div>
             <div class="col-12">
                 <div class="card-mb4">
@@ -49,12 +48,18 @@
                             {% for item in value %}
                                 <tr>
                                     <td>{{ item.Date }}</td>
-                                    <td>{{ item.Open }}</td>
-                                    <td>{{ item.High }}</td>
-                                    <td>{{ item.Low }}</td>
-                                    <td>{{ item.Close }}</td>
-                                    <td>{{ item.Adj }}</td>
-                                    <td>{{ item.Volume }}</td>
+{#                                    <td>{{ item.Open }}</td>#}
+{#                                    <td>{{ item.High }}</td>#}
+{#                                    <td>{{ item.Low }}</td>#}
+{#                                    <td>{{ item.Close }}</td>#}
+{#                                    <td>{{ item.Adj }}</td>#}
+{#                                    <td>{{ item.Volume }}</td>#}
+                                    <td>{{ "{:,.0f}".format(item.Open) }}</td>
+                                    <td>{{ "{:,.0f}".format(item.High) }}</td>
+                                    <td>{{ "{:,.0f}".format(item.Low) }}</td>
+                                    <td>{{ "{:,.0f}".format(item.Close) }}</td>
+                                    <td>{{ "{:,.0f}".format(item.Adj) }}</td>
+                                    <td>{{ "{:,.0f}".format(item.Volume) }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
