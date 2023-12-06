@@ -21,5 +21,7 @@ class dataTest(db.Model):
 
 class dataResult(db.Model):
     __tablename__ = 'result'
-    Date = db.Column(db.Date, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    Date = db.Column(db.Date)
     Close = db.Column(db.Float)
+    Result = db.Column(db.Float)
