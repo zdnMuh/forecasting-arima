@@ -3,18 +3,15 @@ from dbConf import db, dataTrain, dataTest, dataResult
 from datetime import datetime
 from forms import uploadForm
 import pandas as pd
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from arima import forecastArima
+from forecast import perform_forecast
+from sqlalchemy import inspect
 
 app = Flask(__name__)
-# db
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/db_goto'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Cupborneo@localhost/db_goto'
 db.init_app(app)
-app.config['SECRET_KEY'] = 'kunci_rahasia'
 
-# class MyForm(FlaskForm):
-#     name = StringField('Nama')
-#     submit = SubmitField('Submit')
+app.config['SECRET_KEY'] = 'kunci_rahasia'
 
 @app.route('/dashboard/')
 def dashboard():  # put application's code here
@@ -75,9 +72,13 @@ def deleteAllTrain():
         db.session.commit()
         return redirect(url_for('train'))
 
-@app.route('/test/')
-def test():  # put application's code here
+@app.route('/test/', methods=['GET', 'POST'])
+def test():
     data = dataTest.query.all()
+    if request.method == 'POST':
+        perform_forecast()
+        return redirect(url_for('result'))
+
     return render_template("/home/dataTest.html", value=data)
 
 @app.route('/deleteAllTest', methods=['POST'])
@@ -108,9 +109,9 @@ def home():  # put application's code here
     data = dataTrain.query.all()
     return render_template("/home/home.html/")
 
-@app.route('/tesja')
+@app.route('/tesja/')
 def hello():
-    return render_template("home/cob.html")
+    gas()
 
 # def get_title():
 #     return request.endpoint.split('.')[-1].capitalize()
