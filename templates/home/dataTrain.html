@@ -48,18 +48,18 @@
                             {% for item in value %}
                                 <tr>
                                     <td>{{ item.Date }}</td>
-{#                                    <td>{{ item.Open }}</td>#}
-{#                                    <td>{{ item.High }}</td>#}
-{#                                    <td>{{ item.Low }}</td>#}
-{#                                    <td>{{ item.Close }}</td>#}
-{#                                    <td>{{ item.Adj }}</td>#}
-{#                                    <td>{{ item.Volume }}</td>#}
-                                    <td>{{ "{:,.0f}".format(item.Open) }}</td>
-                                    <td>{{ "{:,.0f}".format(item.High) }}</td>
-                                    <td>{{ "{:,.0f}".format(item.Low) }}</td>
-                                    <td>{{ "{:,.0f}".format(item.Close) }}</td>
-                                    <td>{{ "{:,.0f}".format(item.Adj) }}</td>
-                                    <td>{{ "{:,.0f}".format(item.Volume) }}</td>
+                                    <td>{{ item.Open }}</td>
+                                    <td>{{ item.High }}</td>
+                                    <td>{{ item.Low }}</td>
+                                    <td>{{ item.Close }}</td>
+                                    <td>{{ item.Adj }}</td>
+                                    <td>{{ item.Volume }}</td>
+{#                                    <td>{{ "{:,.0f}".format(item.Open) }}</td>#}
+{#                                    <td>{{ "{:,.0f}".format(item.High) }}</td>#}
+{#                                    <td>{{ "{:,.0f}".format(item.Low) }}</td>#}
+{#                                    <td>{{ "{:,.0f}".format(item.Close) }}</td>#}
+{#                                    <td>{{ "{:,.0f}".format(item.Adj) }}</td>#}
+{#                                    <td>{{ "{:,.0f}".format(item.Volume) }}</td>#}
                                 </tr>
                             {% endfor %}
                         </tbody>

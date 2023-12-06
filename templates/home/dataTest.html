@@ -18,7 +18,12 @@
                     <form method="post" action="{{ url_for('deleteAllTest') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua data?');">
                         <button type="submit" class="btn btn-danger me-md-2">Delete All</button>
                     </form>
-                    <button class="btn btn-success me-md-2" type="button">Process</button>
+{#                    <form method="post" action="{{ url_for('process') }}">#}
+{#                        <button type="submit" class="btn btn-success me-md-2">Process</button>#}
+{#                    </form>#}
+                    <form action="{{ url_for('test') }}" method="post">
+                        <button type="submit" class="btn btn-success me-md-2">Proses</button>
+                    </form>
                 </div>
             </div>
             <div class="row">
@@ -40,7 +45,8 @@
                             {% for item in value %}
                                 <tr>
                                     <td>{{ item.Date }}</td>
-                                    <td>{{ "{:,.0f}".format(item.Close) }}</td>
+{#                                    <td>{{ "{:,.0f}".format(item.Close) }}</td>#}
+                                    <td>{{ item.Close }}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
