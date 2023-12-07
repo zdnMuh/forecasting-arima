@@ -4,8 +4,7 @@ from datetime import datetime
 from forms import uploadForm
 import pandas as pd
 from arima import forecastArima
-from forecast import perform_forecast
-from sqlalchemy import inspect
+from forecast import forecastArima
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Cupborneo@localhost/db_goto'
@@ -76,7 +75,7 @@ def deleteAllTrain():
 def test():
     data = dataTest.query.all()
     if request.method == 'POST':
-        perform_forecast()
+        forecastArima()
         return redirect(url_for('result'))
 
     return render_template("/home/dataTest.html", value=data)
@@ -91,7 +90,17 @@ def deleteAllTest():
 @app.route('/result/')
 def result():  # put application's code here
     data = dataResult.query.all()
-    return render_template("/home/resultForecast.html", value=data)
+    dates = [result.Date.strftime('%Y-%m-%d') for result in data]
+    close = [result.Close for result in data]
+    result = [result.Result for result in data]
+    return render_template("home/resultForecast.html", value=data, dates=dates, close=close, result=result)
+
+@app.route('/deleteAllResult/', methods=['POST'])
+def deleteAllResult():
+    if request.method == 'POST':
+        dataResult.query.delete()
+        db.session.commit()
+        return redirect(url_for('result'))
 
 @app.route('/login')
 def login():  # put application's code here
@@ -111,7 +120,12 @@ def home():  # put application's code here
 
 @app.route('/tesja/')
 def hello():
-    gas()
+    data = dataResult.query.all()
+    # Ekstrak kolom 'Date', 'Close', dan 'Result' dari hasil query
+    dates = [result.Date.strftime('%Y-%m-%d') for result in data]
+    close = [result.Close for result in data]
+    result = [result.Result for result in data]
+    return render_template("home/charts.html", dates=dates, close=close, result=result)
 
 # def get_title():
 #     return request.endpoint.split('.')[-1].capitalize()

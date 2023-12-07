@@ -14,12 +14,19 @@
                 <li class="breadcrumb-item active m-1">Dashboard</li>
             </ol>
             <div class="row">
-            <div class="col-12">
-                <div class="card-mb4">
-                    <div class="card-header">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
+                    <form method="post" action="{{ url_for('deleteAllResult') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua data?');">
+                        <button type="submit" class="btn btn-danger me-md-2">Delete All</button>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card-mb4">
+                        <div class="card-header">
                         <i class="fas fa-table me-1"></i>
-                        DataTable Example
-                    </div>
+                        Table Forecasting Result
+                        </div>
                     <div class="card-body">
                         <table class="table" id="datatablesSimple">
                         <thead>
@@ -38,30 +45,20 @@
                                 </tr>
                             {% endfor %}
                         </tbody>
-                    </table>
+                        </table>
+                    </div>
                     </div>
                 </div>
             </div>
-        </div>
-            <div class="row">
-                <div class="col-xl-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-chart-area me-1"></i>
-                            Data Actual
-                        </div>
-                        <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
-                    </div>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-area me-1"></i>
+                    Chart Forecasting Result
                 </div>
-                <div class="col-xl-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-chart-bar me-1"></i>
-                            Result Forecasting
-                        </div>
-                        <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
-                    </div>
+                <div class="card-body">
+                    <canvas id="myChart" width="100%" height="30"></canvas>
                 </div>
+                <div class="card-footer small text-muted" id="real-time-clock"></div>
             </div>
         </div>
     </main>
@@ -70,14 +67,78 @@
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('myChart');
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="/static/assets/demo/chart-area-demo.js"></script>
-    <script src="{{ url_for('static', filename='demo/chart-area-demo.js') }}"></script>
-    <script src="/static/assets/demo/chart-bar-demo.js"></script>
-    <script src="{{ url_for('static', filename='demo/chart-bar-demo.js') }}"></script>
+        // Ambil data dari Flask dan gunakan untuk membuat grafik
+        const dates = {{ dates|tojson|safe }};
+        const closeValues = {{ close|tojson|safe }};
+        const resultValues = {{ result|tojson|safe }};
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+            labels: dates,
+            datasets: [{
+                    label: 'Close Values',
+                    data: closeValues,
+                    borderWidth: 2,
+                    borderColor: 'blue',
+                    backgroundColor: 'rgba(0, 0, 255, 0.2)'
+                }, {
+                    label: 'Result Values',
+                    data: resultValues,
+                    borderWidth: 3,
+                    borderColor: 'red',
+                    backgroundColor: 'rgba(255, 0, 0, 0.2)'
+                }]
+            },
+            options: {
+                animation: {
+                    duration: 2000,  // Durasi animasi dalam milidetik
+                    easing: 'easeInOutQuart'  // Gaya animasi
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        },
+                        ticks: {
+                            maxRotation: 0,  // Rotasi label sumbu x
+                            autoSkip: true,
+                            maxTicksLimit: 8
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script>
+        function updateRealTimeClock() {
+            var currentTime = new Date();
+            var formattedTime = currentTime.toLocaleTimeString();
+
+            // Tampilkan waktu pada elemen dengan id "real-time-clock"
+            document.getElementById("real-time-clock").innerHTML = "Updated today at " + formattedTime;
+        }
+
+        // Panggil fungsi pertama kali untuk memulai pembaruan waktu
+        updateRealTimeClock();
+
+        // Perbarui waktu setiap detik (1000 milidetik)
+        setInterval(updateRealTimeClock, 1000);
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-    <script src="/static/assets/js/datatables-simple-demo.js"></script>
-    <script src="{{ url_for('static', filename='js/datatables-simple-demo.js') }}"></script>
-
+    <script src="{{ url_for('static', filename='js/datatables-simple.js') }}"></script>
 {% endblock javascripts %}
