@@ -3,8 +3,10 @@ from dbConf import db, dataTrain, dataTest, dataResult
 from datetime import datetime
 from forms import uploadForm
 import pandas as pd
-from arima import forecastArima
-from forecast import forecastArima
+# from arima import forecastArima
+from forecast import forecastArima, calculateError
+from tesjani import ambil
+from scrape import saveScrape
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Cupborneo@localhost/db_goto'
@@ -29,7 +31,7 @@ def train():  # put application's code here
 
         # Memasukkan data ke tabel Test
         for date, close in dataTestRecords:
-            formatted_date = datetime.strptime(date, '%m/%d/%Y').strftime('%Y-%m-%d')
+            formatted_date = datetime.strptime(date, '%Y-%m-%d').strftime('%Y-%m-%d')
             newDataTest = dataTest(Date=formatted_date, Close=close)
             db.session.add(newDataTest)
 
@@ -93,7 +95,8 @@ def result():  # put application's code here
     dates = [result.Date.strftime('%Y-%m-%d') for result in data]
     close = [result.Close for result in data]
     result = [result.Result for result in data]
-    return render_template("home/resultForecast.html", value=data, dates=dates, close=close, result=result)
+    rmse = calculateError()
+    return render_template("home/resultForecast.html", value=data, dates=dates, close=close, result=result, rmse=rmse)
 
 @app.route('/deleteAllResult/', methods=['POST'])
 def deleteAllResult():
@@ -118,14 +121,23 @@ def home():  # put application's code here
     data = dataTrain.query.all()
     return render_template("/home/home.html/")
 
+@app.route('/scrape/', methods=['POST', 'GET'])
+def scraping():
+    if request.method == 'POST':
+        symbol = request.form['symbol']
+        start_date = request.form['start_date']
+        end_date = request.form['end_date']
+
+        saveScrape(symbol=symbol, startDate=start_date, endDate=end_date)
+
+        return redirect(url_for('train'))
+
+    return render_template('/home/scrapeForm.html')
+
 @app.route('/tesja/')
 def hello():
-    data = dataResult.query.all()
-    # Ekstrak kolom 'Date', 'Close', dan 'Result' dari hasil query
-    dates = [result.Date.strftime('%Y-%m-%d') for result in data]
-    close = [result.Close for result in data]
-    result = [result.Result for result in data]
-    return render_template("home/charts.html", dates=dates, close=close, result=result)
+    data = ambil()
+    return data
 
 # def get_title():
 #     return request.endpoint.split('.')[-1].capitalize()
