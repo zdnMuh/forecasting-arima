@@ -7,6 +7,7 @@ import pandas as pd
 from forecast import forecastArima, calculateError
 from tesjani import ambil
 from scrape import saveScrape
+from addDate import add_last_3_days_to_data_test
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Cupborneo@localhost/db_goto'
@@ -18,10 +19,12 @@ app.config['SECRET_KEY'] = 'kunci_rahasia'
 def dashboard():  # put application's code here
     hitung1 = dataTrain.query.count()
     hitung2 = dataTest.query.count()
-    return render_template("/home/index.html", hitung1=hitung1, hitung2=hitung2)
+    segment = "index"
+    return render_template("/home/index.html", hitung1=hitung1, hitung2=hitung2, segment=segment)
 
 @app.route('/train/', methods=['GET', 'POST'])
 def train():  # put application's code here
+    segment = "train"
     if request.method == 'POST':
         # Mendapatkan data dari tabel Train
         dataTrainRecords = dataTrain.query.all()
@@ -36,14 +39,16 @@ def train():  # put application's code here
             db.session.add(newDataTest)
 
         db.session.commit()
+        # add_last_3_days_to_data_test()
         return redirect(url_for("test"))
     data = dataTrain.query.all()
-    return render_template("/home/dataTrain.html", value=data)
+    return render_template("/home/dataTrain.html", value=data, segment=segment)
 
 
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload():
     form = uploadForm()
+    segment = "upload"
 
     if form.validate_on_submit():
         csv_file = form.csv_file.data
@@ -64,7 +69,7 @@ def upload():
         db.session.commit()
         return redirect(url_for('train'))
 
-    return render_template('/home/upload.html', title='Upload', form=form)
+    return render_template('/home/upload.html', title='Upload', form=form, segment=segment)
 
 @app.route('/deleteAllTrain/', methods=['POST'])
 def deleteAllTrain():
@@ -76,11 +81,12 @@ def deleteAllTrain():
 @app.route('/test/', methods=['GET', 'POST'])
 def test():
     data = dataTest.query.all()
+    segment = "test"
     if request.method == 'POST':
         forecastArima()
         return redirect(url_for('result'))
 
-    return render_template("/home/dataTest.html", value=data)
+    return render_template("/home/dataTest.html", value=data, segment=segment)
 
 @app.route('/deleteAllTest', methods=['POST'])
 def deleteAllTest():
@@ -91,12 +97,15 @@ def deleteAllTest():
 
 @app.route('/result/')
 def result():  # put application's code here
+    segment = "result"
+    # limit = 7
     data = dataResult.query.all()
     dates = [result.Date.strftime('%Y-%m-%d') for result in data]
+    # close = [result.Close for result in data[:limit]]
     close = [result.Close for result in data]
     result = [result.Result for result in data]
-    rmse = calculateError()
-    return render_template("home/resultForecast.html", value=data, dates=dates, close=close, result=result, rmse=rmse)
+    mape = calculateError()
+    return render_template("home/resultForecast.html", value=data, dates=dates, close=close, result=result, mape=mape, segment=segment)
 
 @app.route('/deleteAllResult/', methods=['POST'])
 def deleteAllResult():
@@ -123,6 +132,7 @@ def home():  # put application's code here
 
 @app.route('/scrape/', methods=['POST', 'GET'])
 def scraping():
+    segment = "scrape"
     if request.method == 'POST':
         symbol = request.form['symbol']
         start_date = request.form['start_date']
@@ -132,7 +142,7 @@ def scraping():
 
         return redirect(url_for('train'))
 
-    return render_template('/home/scrapeForm.html')
+    return render_template('/home/scrapeForm.html', segment=segment)
 
 @app.route('/tesja/')
 def hello():
@@ -143,4 +153,4 @@ def hello():
 #     return request.endpoint.split('.')[-1].capitalize()
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=5001)

@@ -1,6 +1,9 @@
+import pandas as pd
+
 from dbConf import db, dataTrain, dataTest, dataResult
 import yfinance as yf
-from datetime import datetime
+from datetime import datetime, timedelta
+
 
 # Fungsi untuk menyimpan data ke dalam tabel dataTest
 def saveScrape(symbol, startDate, endDate):

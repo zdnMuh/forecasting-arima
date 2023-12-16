@@ -9,10 +9,20 @@
 
     <main>
         <div class="container-fluid px-4">
-            <h1 class="mt-4">Welcome Forecasting Saham GOTO</h1>
-            <ol class="breadcrumb card bg-light">
-                <li class="breadcrumb-item active m-1">Dashboard</li>
-            </ol>
+            <div class="row">
+                <div class="col-md">
+                    <div class="card p-4 p-md-5 mb-4 mt-4 rounded text-body-emphasis bg-body-secondary" style="background-image: url('{{ url_for('static', filename='img/tes.jpg') }}'); background-repeat: no-repeat; background-position: right">
+                        <div class="col-lg-6 px-0">
+                          <h1 class="display-4 fst-italic">Welcome Forecasting Saham GOTO</h1>
+                          <p class="lead my-3">Multiple lines of text that form the lede, informing new readers quickly and efficiently about what’s most interesting in this post’s contents.</p>
+                          <p class="lead mb-0"><a href="#" class="text-body-emphasis fw-bold">Continue reading...</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{#            <ol class="breadcrumb card bg-light">#}
+{#                <li class="breadcrumb-item active m-1">Dashboard</li>#}
+{#            </ol>#}
             <div class="row">
                 <div class="col-md-4">
                     <div class="card bg-primary text-white mb-4">
@@ -37,8 +47,8 @@
                             <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                         </div>
                     </div>
+                </div>
             </div>
-        </div>
         </div>
     </main>
 
@@ -48,12 +58,11 @@
 {% block javascripts %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-    <script src="/static/assets/demo/chart-area-demo.js"></script>
-    <script src="{{ url_for('static', filename='demo/chart-area-demo.js') }}"></script>
-    <script src="/static/assets/demo/chart-bar-demo.js"></script>
-    <script src="{{ url_for('static', filename='demo/chart-bar-demo.js') }}"></script>
+    {#    <script src="{{ url_for('static', filename='demo/chart-area-demo.js') }}"></script>#}
+    {#    <script src="/static/assets/demo/chart-bar-demo.js"></script>#}
+    {#    <script src="{{ url_for('static', filename='demo/chart-bar-demo.js') }}"></script>#}
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-    <script src="/static/assets/js/datatables-simple-demo.js"></script>
-    <script src="{{ url_for('static', filename='js/datatables-simple-demo.js') }}"></script>
+    {#    <script src="/static/assets/js/datatables-simple.js"></script>#}
+    {#    <script src="{{ url_for('static', filename='js/datatables-simple.js') }}"></script>#}
 
 {% endblock javascripts %}
