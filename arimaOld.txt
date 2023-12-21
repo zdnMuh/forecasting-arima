@@ -1,0 +1,82 @@
+import pandas as pd
+from statsmodels.tsa.arima.model import ARIMA
+from pmdarima import auto_arima
+from dbConf import dataTest, dataResult
+
+def forecastArima(data):
+    # Buat model ARIMA
+    stepwise_fit = auto_arima(data['Close'], trace=True, suppress_warnings=True)
+    # df = pd.DataFrame([(record.Date, record.Close) for record in dataTest], columns=['Date', 'Close'])
+    model = ARIMA(data['Close'], order=stepwise_fit.order)
+    results = model.fit()
+
+    # Lakukan peramalan untuk beberapa langkah ke depan
+    forecast_steps = 3  # Ganti dengan jumlah langkah ke depan yang diinginkan
+    forecast = results.get_forecast(steps=forecast_steps)
+    forecast_mean = forecast.predicted_mean
+
+    # Tambahkan hasil peramalan ke DataFrame
+    # forecast_df = pd.DataFrame({'Date': forecast_mean.index, 'Forecast': forecast_mean.values})
+
+    # Simpan hasil peramalan ke tabel hasil di database Flask
+    for date, forecast_value in zip(forecast_mean.index, forecast_mean.values):
+        result = ForecastResult(Date=date.strftime('%Y-%m-%d'), Close=forecast_value)
+        db.session.add(result)
+
+    return forecast_df
+
+    # Ambil data dari tabel Test dan konversi ke DataFrame
+    data = dataTest.query.all()
+
+    # Ubah tipe data kolom 'Close' sesuai dengan karakteristik data
+    data['Close'] = data['Close'].astype(float)
+
+    # Buat model ARIMA
+    stepwise_fit = auto_arima(data['Close'], trace=True, suppress_warnings=True)
+    model = ARIMA(data['Close'], order=stepwise_fit.order)
+    results = model.fit()
+
+    # Lakukan peramalan untuk beberapa langkah ke depan
+    forecast_steps = 3
+    forecast = results.get_forecast(steps=forecast_steps)
+    forecast_mean = forecast.predicted_mean
+
+    # Tambahkan hasil peramalan ke DataFrame
+    forecast_df = pd.DataFrame({'Date': forecast_mean.index, 'Forecast': forecast_mean.values})
+
+    # Simpan hasil peramalan ke tabel hasil di database Flask
+    for index, row in forecast_df.iterrows():
+        result = dataResult(
+            Date=row['Date'].strftime('%Y-%m-%d %H:%M:%S'),  # Sesuaikan format timestamp sesuai kebutuhan
+            Close=row['Forecast']
+        )
+        db.session.add(result)
+
+    db.session.commit()
+    # data = dataTest.query.all()
+    #
+    # # Ubah tipe data kolom 'Close' dari str ke float
+    # data['Close'] = data['Close'].astype(int)
+    #
+    # # Buat model ARIMA
+    # stepwise_fit = auto_arima(data['Close'], trace=True, suppress_warnings=True)
+    # model = ARIMA(data['Close'], order=stepwise_fit.order)
+    # results = model.fit()
+    #
+    # # Lakukan peramalan untuk beberapa langkah ke depan
+    # forecast_steps = 3  # Ganti dengan jumlah langkah ke depan yang diinginkan
+    # forecast = results.get_forecast(steps=forecast_steps)
+    # forecast_mean = forecast.predicted_mean
+    #
+    # # Tambahkan hasil peramalan ke DataFrame
+    # forecast_df = pd.DataFrame({'Date': forecast_mean.index, 'Forecast': forecast_mean.values})
+    #
+    # # Simpan hasil peramalan ke tabel hasil di database Flask
+    # for index, row in forecast_df.iterrows():
+    #     result = dataResult(
+    #         Date=row['Date'],
+    #         Close=row['Forecast']
+    #     )
+    #     db.session.add(result)
+    #
+    # db.session.commit()

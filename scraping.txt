@@ -176,3 +176,15 @@ def scrape():
 
 import requests
 from bs4 import BeautifulSoup
+
+    with app.app_context():
+        # Mendapatkan informasi tipe data kolom dari model
+        inspector = inspect(db.engine)
+        columns = inspector.get_columns(dataTest.__table__.name)
+
+        # Mencetak tipe data kolom
+        column_info = []
+        for column in columns:
+            column_info.append(f"Column: {column['name']}, Type: {column['type']}")
+
+    return "<br>".join(column_info)

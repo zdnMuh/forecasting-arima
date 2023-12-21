@@ -39,7 +39,7 @@ def train():  # put application's code here
             db.session.add(newDataTest)
 
         db.session.commit()
-        # add_last_3_days_to_data_test()
+        add_last_3_days_to_data_test()
         return redirect(url_for("test"))
     data = dataTrain.query.all()
     return render_template("/home/dataTrain.html", value=data, segment=segment)
@@ -98,11 +98,11 @@ def deleteAllTest():
 @app.route('/result/')
 def result():  # put application's code here
     segment = "result"
-    # limit = 7
+    limit = 7
     data = dataResult.query.all()
     dates = [result.Date.strftime('%Y-%m-%d') for result in data]
-    # close = [result.Close for result in data[:limit]]
-    close = [result.Close for result in data]
+    close = [result.Close for result in data[:limit]]
+    # close = [result.Close for result in data]
     result = [result.Result for result in data]
     mape = calculateError()
     return render_template("home/resultForecast.html", value=data, dates=dates, close=close, result=result, mape=mape, segment=segment)
@@ -130,7 +130,7 @@ def home():  # put application's code here
     data = dataTrain.query.all()
     return render_template("/home/home.html/")
 
-@app.route('/scrape/', methods=['POST', 'GET'])
+@app.route('/crawling/', methods=['POST', 'GET'])
 def scraping():
     segment = "scrape"
     if request.method == 'POST':

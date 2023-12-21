@@ -1,18 +1,27 @@
-<!-- templates/upload.html -->
+
 {% extends 'layouts/base.html' %}
 
 {% block content %}
     <div class="container-fluid px-4">
-        <h1>Upload CSV File</h1>
-        <form method="post" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}
-            <div class="form-group">
-                {{ form.csv_file.label(class="form-control-label") }}
-                {{ form.csv_file(class="form-control form-control-file") }}
+        <div class="row mt-5">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title text-center mb-4">Upload CSV File</h1>
+                        <form method="post" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            <div class="mb-3">
+                                {{ form.csv_file.label(class="form-control-label", style="margin-bottom: 10px; margin-left: 3px") }}
+                                {{ form.csv_file(class="form-control form-control-file") }}
+                            </div>
+                            <div class="text-center">
+                                {{ form.submit(class="btn btn-primary") }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-primary") }}
-            </div>
-        </form>
+        </div>
     </div>
 {% endblock %}
+

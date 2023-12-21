@@ -1,0 +1,52 @@
+from statsmodels.tsa.arima.model import ARIMA
+import pandas as pd
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
+from dbConf import db, dataTrain, dataTest, dataResult
+# from YourApp import app  # Pastikan ini sesuai dengan struktur aplikasi Flask Anda
+
+def plotToBase(figure):
+    buffer = BytesIO()
+    figure.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_base64 = base64.b64encode(buffer.read()).decode('utf-8')
+    buffer.close()
+    return image_base64
+
+# @app.route('/forecast', methods=['POST'])
+def forecastArima():
+    # Konversi data ke DataFrame
+    df = pd.DataFrame([(record.Date, record.Close) for record in dataTest], columns=['Date', 'Close'])
+
+    # Pastikan kolom Date merupakan tipe datetime
+    df['Date'] = pd.to_datetime(df['Date'])
+
+    # Set kolom Date sebagai index
+    df.set_index('Date', inplace=True)
+
+    # Membuat model ARIMA
+    model = ARIMA(df['Close'], order=(1, 1, 1))
+    results = model.fit()
+
+    # Lakukan peramalan
+    forecast_steps = 3  # Jumlah langkah peramalan
+    forecast = results.get_forecast(steps=forecast_steps)
+
+    # Hasil peramalan
+    forecast_values = forecast.predicted_mean.values.tolist()
+
+    # Buat grafik
+    plt.figure(figsize=(10, 5))
+    plt.plot(df.index, df['Close'], label='Actual Data')
+    plt.plot(forecast.predicted_mean.index, forecast_values, label='ARIMA Forecast', linestyle='dashed')
+    plt.title('Actual Data vs ARIMA Forecast')
+    plt.xlabel('Date')
+    plt.ylabel('Close Price')
+    plt.legend()
+
+    plot_image = plotToBase(plt)
+
+    return forecast_values, plot_image
+    # Kirim hasil peramalan dan gambar ke halaman test
+    # return render_template('dataTest.html', forecast_values=forecast_values, plot_image=plot_image)
