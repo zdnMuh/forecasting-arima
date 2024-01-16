@@ -9,11 +9,8 @@
 
     <main>
         <div class="container-fluid px-4">
-            <h1 class="mt-4">Data Test</h1>
-            <ol class="breadcrumb mb-4 card bg-light">
-                <li class="breadcrumb-item active m-1">Data Test</li>
-            </ol>
             <div class="row">
+                <h1 class="mt-4 ">Data Test</h1>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
                     <form method="post" action="{{ url_for('deleteAllTest') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua data?');">
                         <button type="submit" class="btn btn-danger me-md-2">Delete All</button>

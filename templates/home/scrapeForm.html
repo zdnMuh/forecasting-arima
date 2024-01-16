@@ -9,11 +9,24 @@
                         <h1 class="card-title text-center mb-4">Crawling Data</h1>
                         <!-- Formulir Bootstrap -->
                         <form method="post">
-
                             <!-- Grup Formulir Bootstrap -->
                             <div class="form-group mb-3">
-                                <label for="symbol">Symbol:</label>
-                                <input type="text" class="form-control" id="symbol" name="symbol" required>
+                                <label for="symbol">Index:</label>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="enableSwitch">
+                                    <label class="form-check-label" for="enableSwitch">Choose</label>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <select class="form-control" id="symbolSelect" name="symbol" required disabled>
+                                        <option value="">-- Top 5 Indonesia --</option>
+                                        <option value="GOTO.JK">GOTO.JK</option>
+                                        <option value="ANTM.JK">ANTM.JK</option>
+                                        <option value="BBCA.JK">BBCA.JK</option>
+                                        <option value="BYAN.JK">BYAN.JK</option>
+                                        <option value="BBRI.JK">BBRI.JK</option>
+                                    </select>
+                                </div>
+                                <input type="text" class="form-control" id="symbolInputText" name="symbol" required>
                             </div>
 
                             <div class="form-group mb-3">
@@ -33,4 +46,28 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        // Fungsi untuk menangani peristiwa change pada checkbox
+
+        function handleCheckboxChange(event) {
+            const checkbox = event.target;
+            let isChecked = checkbox.checked;
+
+            console.log('Checkbox checked:', isChecked);
+
+            const symbolSelect = document.getElementById('symbolSelect');
+            const symbolInputText = document.getElementById('symbolInputText');
+
+            console.log('symbolSelect:', symbolSelect);
+            console.log('symbolInputText:', symbolInputText);
+
+            symbolSelect.disabled = !isChecked;
+            symbolInputText.disabled = isChecked;
+        }
+
+        // Menambahkan event listener ke checkbox
+        document.getElementById('enableSwitch').addEventListener('change', handleCheckboxChange);
+    </script>
 {% endblock %}

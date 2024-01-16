@@ -4,80 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <title>Forecasting Harga Saham</title>
     <style>
         body {
             background-color: #f0f0f0; /* Warna abu latar belakang */
         }
-        .jumbotron {
-            background-color: #ffffff; /* Warna putih latar belakang jumbotron */
-            padding: 2rem;
-            margin: 0;
-        }
     </style>
 </head>
 <body>
-    <div class="jumbotron">
-        <div class="container text-center">
-            <h1>Forecasting Harga Saham</h1>
-            <p>Di sini Anda dapat menemukan informasi tentang beberapa saham dan peramalan harga sahamnya.</p>
-            <a href="/dashboard" class="btn btn-primary btn-dashboard">Masuk ke Dashboard</a>
+    <div class="container my-5">
+        <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+            <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+                <h1 class="display-4 fw-bold lh-1">Forecasting Stock Prices</h1>
+                <p class="lead">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-4 mb-lg-3">
+                    <a href="/dashboard" class="btn btn-primary btn-lg px-4 me-md-2 fw-bold">Dashboard</a>
+                </div>
+            </div>
+            <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+              <img class="rounded-3" src="static/img/tes.jpg" alt="" width="600">
+            </div>
         </div>
     </div>
 
-    <!-- Grafik Peramalan -->
-    <div class="container mt-5">
-        <h2>Grafik Peramalan</h2>
-        <!-- Tambahkan grafik peramalan di sini menggunakan library atau elemen HTML yang sesuai -->
+    <div class="container px-4 py-5" id="icon-grid">
+        <h2 class="pb-2 border-bottom">Featured</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
+          <div class="col d-flex align-items-start">
+              <div class="div">
+                  <h4 class="fw-bold mb-0"><i class="fas fa-pen"></i> Dashboard</h4>
+                  <p>Paragraph of text beneath the heading to explain the heading.</p>
+              </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h4 class="fw-bold mb-0"><i class="fas fa-pen"></i> Data Train</h4>
+              <p>Paragraph of text beneath the heading to explain the heading.</p>
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h4 class="fw-bold mb-0"><i class="fas fa-pen"></i> Data Test</h4>
+              <p>Paragraph of text beneath the heading to explain the heading.</p>
+            </div>
+          </div>
+          <div class="col d-flex align-items-start">
+            <div>
+              <h4 class="fw-bold mb-0"><i class="fas fa-pen"></i> Result</h4>
+              <p>Paragraph of text beneath the heading to explain the heading.</p>
+            </div>
+          </div>
+        </div>
     </div>
 
-    <!-- Metode Peramalan -->
-    <div class="container mt-5">
-        <h2>Metode Peramalan</h2>
-        <p>Jelaskan metode atau algoritma yang digunakan untuk peramalan harga saham.</p>
-    </div>
-
-    <!-- Data Historis -->
-    <div class="container mt-5">
-        <h2>Data Historis</h2>
-        <!-- Tampilkan data historis harga saham dalam bentuk tabel atau grafik -->
-    </div>
-
-    <!-- Hasil Analisis -->
-    <div class="container mt-5">
-        <h2>Hasil Analisis</h2>
-        <p>Berikan hasil analisis harga saham, seperti tren yang teridentifikasi, volatilitas, dll.</p>
-    </div>
-
-    <!-- Ringkasan Model -->
-    <div class="container mt-5">
-        <h2>Ringkasan Model</h2>
-        <p>Jelaskan model atau teknik peramalan yang digunakan dengan lebih rinci.</p>
-    </div>
-
-    <!-- Evaluasi Model -->
-    <div class="container mt-5">
-        <h2>Evaluasi Model</h2>
-        <p>Diskusikan cara mengukur kinerja model peramalan, seperti RMSE atau MAE.</p>
-    </div>
-
-    <!-- Rekomendasi atau Kesimpulan -->
-    <div class="container mt-5">
-        <h2>Rekomendasi atau Kesimpulan</h2>
-        <p>Berikan rekomendasi atau kesimpulan berdasarkan hasil peramalan harga saham.</p>
-    </div>
-
-    <!-- Referensi atau Sumber Data -->
-    <div class="container mt-5">
-        <h2>Referensi atau Sumber Data</h2>
-        <p>Cantumkan referensi atau sumber data yang digunakan dalam analisis peramalan Anda.</p>
-    </div>
-
-    <!-- Kontak atau Tanya Jawab -->
-    <div class="container mt-5">
-        <h2>Kontak atau Tanya Jawab</h2>
-        <p>Jika Anda memiliki pertanyaan atau ingin berkomunikasi, silakan hubungi kami di [alamat email].</p>
-    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
