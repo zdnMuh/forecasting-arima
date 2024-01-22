@@ -12,23 +12,36 @@
             <h1 class="mt-4" style="font-family: 'Tahoma'">Data Train</h1>
             <div class="row">
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-4">
-                    <form method="post" action="{{ url_for('train') }}">
-                    <!-- Isi formulir dengan input atau elemen formulir lainnya sesuai kebutuhan -->
-                    <!-- Misalnya, input file untuk mengunggah data, atau input teks untuk parameter lain -->
-                        <button class="btn btn-success me-md-2" type="submit">Pre-Processing</button>
+                    <form method="post" action="{{ url_for('train') }}" class="me-md-2">
+                        <div class="form-group">
+                            <div class="row align-items-end">
+                                <div class="col-auto">
+                                    <select class="form-select" aria-label="Default select example" name="coba">
+                                        <option selected>Choose</option>
+                                        <option value="2">1</option>
+                                        <option value="4">3</option>
+                                        <option value="8">7</option>
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <button class="btn btn-success" type="submit">Pre-Processing</button>
+                                </div>
+                            </div>
+                        </div>
                     </form>
-                    <form method="post" action="{{ url_for('deleteAllTrain') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua data?');">
-                        <button type="submit" class="btn btn-danger me-md-2">Delete All</button>
+
+                    <form method="post" action="{{ url_for('deleteAllTrain') }}" onsubmit="return confirm('Apakah Anda yakin ingin menghapus semua data?');" class="me-md-2">
+                        <button type="submit" class="btn btn-danger">Delete All</button>
                     </form>
-                    <!-- Example single danger button -->
-                    <div class="btn-group">
-                      <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        Action
-                      </button>
-                      <div class="dropdown-menu">
-                          <a class="dropdown-item" href="{{ url_for('scraping') }}">Crawling Data</a>
-                          <a class="dropdown-item" href="{{ url_for('upload') }}">Import Data</a>
-                      </div>
+
+                    <div class="btn-group me-md-2">
+                        <button type="button" class="btn btn-sm btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            Action
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-sm">
+                            <a class="dropdown-item" href="{{ url_for('scraping') }}">Crawling Data</a>
+                            <a class="dropdown-item" href="{{ url_for('upload') }}">Import Data</a>
+                        </div>
                     </div>
                 </div>
             <div class="col-12">

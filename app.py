@@ -28,6 +28,8 @@ def train():  # put application's code here
     if request.method == 'POST':
         # Mendapatkan data dari tabel Train
         dataTrainRecords = dataTrain.query.all()
+        segments = int(request.form.get('coba'))
+        print(segments)
 
         # Mengambil hanya field Date dan Close
         dataTestRecords = [(record.Date, record.Close) for record in dataTrainRecords]
@@ -39,7 +41,7 @@ def train():  # put application's code here
             db.session.add(newDataTest)
 
         db.session.commit()
-        add_last_3_days_to_data_test()
+        add_last_3_days_to_data_test(segments)
         return redirect(url_for("test"))
     data = dataTrain.query.all()
     return render_template("/home/dataTrain.html", value=data, segment=segment)
@@ -153,4 +155,4 @@ def hello():
 #     return request.endpoint.split('.')[-1].capitalize()
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run(debug=True)

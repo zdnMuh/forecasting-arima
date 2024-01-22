@@ -24,6 +24,26 @@ def forecastArima():
 
     # Save results to the database
     saveForecastResults(predictionsArima, test)
+    # while df['Close'].isnull().any():
+    #     missing_indices = df.index[df['Close'].isnull()]
+    #     for index in missing_indices:
+    #         preceding_data = df.loc[df.index < index, 'Close'].dropna()
+    #         if not preceding_data.empty:
+    #             last_value = preceding_data.iloc[-1]
+    #             df.at[index, 'Close'] = last_value
+    #
+    # # Split data into train and test sets
+    # train, test = series[:-10], series[-10:]
+    #
+    # # Create ARIMA model
+    # automodel = pm.auto_arima(train, start_p=0, start_q=0, seasonal=True, trace=True, stepwise=False)
+    #
+    # # Make predictions
+    # predictionsArima = automodel.predict(n_periods=test.shape[0])
+    #
+    # # Save results to the database
+    # # saveForecastResults(predictionsArima, test)
+    # print(predictionsArima)
 
 # Fungsi untuk menyimpan hasil peramalan ke tabel dataResult
 def saveForecastResults(predictions_arima, test):
